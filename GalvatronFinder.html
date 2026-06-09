@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galvatron Precision Locator</title>
+    <style>
+        :root {
+            --bg-color: #1a1a2e;
+            --text-color: #e0e0e0;
+            --primary-neon: #00ffcc;
+            --secondary-neon: #ff0077;
+            --card-bg: #2a2a4a;
+            --border-radius: 8px;
+            --shadow-glow: 0 0 10px rgba(0, 255, 204, 0.4);
+            --shadow-glow-active: 0 0 15px rgba(255, 0, 119, 0.6);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        .container {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-glow);
+            padding: 25px;
+            width: 100%;
+            max-width: 450px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+            border: 1px solid var(--primary-neon);
+        }
+
+        h1 {
+            color: var(--primary-neon);
+            text-align: center;
+            margin-bottom: 30px;
+            text-shadow: var(--shadow-glow);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-color);
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        input[type="number"] {
+            width: calc(100% - 20px);
+            padding: 12px;
+            background-color: #3a3a5a;
+            border: 1px solid var(--primary-neon);
+            border-radius: var(--border-radius);
+            color: var(--text-color);
+            font-size: 1em;
+            outline: none;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus {
+            border-color: var(--secondary-neon);
+            box-shadow: var(--shadow-glow-active);
+        }
+
+select {
+    width: calc(100% - 20px);
+    padding: 12px;
+    background-color: #3a3a5a;
+    border: 1px solid var(--primary-neon);
+    border-radius: var(--border-radius);
+    color: var(--text-color);
+    font-size: 1em;
+    outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    appearance: none; /* elimina estilos nativos del navegador */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    cursor: pointer;
+}
+
+/* Estado de foco igual que los inputs */
+select:focus {
+    border-color: var(--secondary-neon);
+    box-shadow: var(--shadow-glow-active);
+}
+
+        button {
+            background-color: var(--primary-neon);
+            color: var(--bg-color);
+            border: none;
+            border-radius: var(--border-radius);
+            padding: 15px 25px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 20px;
+            transition: background-color 0.3s, box-shadow 0.3s;
+            box-shadow: var(--shadow-glow);
+        }
+
+        button:hover {
+            background-color: var(--secondary-neon);
+            box-shadow: var(--shadow-glow-active);
+        }
+
+        button:disabled {
+            background-color: #555;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        .progress-container {
+            width: 100%;
+            background-color: #333;
+            border-radius: var(--border-radius);
+            margin-top: 20px;
+            overflow: hidden;
+            border: 1px solid var(--primary-neon);
+            height: 25px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 0%;
+            background-color: var(--primary-neon);
+            border-radius: var(--border-radius);
+            text-align: center;
+            color: var(--bg-color);
+            line-height: 25px;
+            transition: width 0.3s ease-in-out;
+            font-weight: bold;
+        }
+
+        .results-container {
+            margin-top: 30px;
+            width: 100%;
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow-glow);
+            padding: 20px;
+            border: 1px solid var(--primary-neon);
+            max-width: 450px;
+        }
+
+        .results-container h2 {
+            color: var(--secondary-neon);
+            text-align: center;
+            margin-bottom: 20px;
+            text-shadow: var(--shadow-glow);
+        }
+
+        #results {
+            list-style: none;
+            padding: 0;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        #results li {
+            background-color: #3a3a5a;
+            border: 1px solid var(--secondary-neon);
+            border-radius: var(--border-radius);
+            padding: 10px 15px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #results li a {
+            color: var(--primary-neon);
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        /* Estilo para el éxito total */
+        .found-hero {
+            border: 2px solid var(--primary-neon) !important;
+            background-color: #004433 !important;
+            text-align: center;
+            padding: 20px !important;
+            display: block !important;
+        }
+
+        .status-message {
+            text-align: center;
+            margin-top: 15px;
+            font-style: italic;
+            color: var(--text-color);
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="mainControls">
+        <h1>Galvatron Finder</h1>
+        <div class="form-group">
+            <label>IP Inicial</label>
+            <input type="text" id="initialIp" value="192.168.1.1">
+        </div>
+        <div class="form-group">
+            <label>Puerto/Ruta (ej: :80/index.php)</label>
+            <!--<input type="text" id="portPath" value="/orders/input.asp?asdf=34546">-->
+<select id="portPath">
+  <option value="/remote_control/commander.php?rnd=3456">Remote Control @Galvatron</option>
+  <option value="/warthunder/dogfight_generator.php">Warthunder Mission @Galvatron</option>
+  <option value="/orders/input.asp?asdf=123">TACSA Order Maker @Citrix</option>  
+</select>			
+        </div>
+        <div class="form-group" style="display: flex; gap: 10px;">
+            <div style="flex: 1;">
+                <label>Rango (Max 255)</label>
+                <input type="number" id="ipRange" value="250">
+            </div>
+            <div style="flex: 1;">
+                <label>Threads</label>
+                <input type="number" id="numThreads" value="250">
+            </div>
+        </div>
+        <button id="startButton">INICIAR BÚSQUEDA</button>
+        <div class="progress-container"><div id="progressBar"></div></div>
+        <div id="statusMessage" style="text-align: center; font-size: 0.8rem; color: #888;"></div>
+    </div>
+
+    <div class="results-container" id="resultsBox">
+        <h2 id="resultsTitle">Resultados</h2>
+        <ul id="results"></ul>
+        <p id="noResultsMessage" style="text-align: center; color: #888;">Esperando inicio...</p>
+    </div>
+
+    <script>
+        let isScanning = false;
+        let stopAll = false;
+
+        document.getElementById('startButton').addEventListener('click', async () => {
+            const startBtn = document.getElementById('startButton');
+            const statusMsg = document.getElementById('statusMessage');
+            const resultsList = document.getElementById('results');
+            const progressBar = document.getElementById('progressBar');
+            const noResMsg = document.getElementById('noResultsMessage');
+            const resultsTitle = document.getElementById('resultsTitle');
+
+            // Reset UI
+            isScanning = true;
+            stopAll = false;
+            resultsList.innerHTML = '';
+            startBtn.disabled = true;
+            noResMsg.style.display = 'none';
+            resultsTitle.textContent = "Buscando...";
+
+            const ipParts = document.getElementById('initialIp').value.split('.');
+            const baseIp = ipParts.slice(0, 3).join('.');
+            const startOctet = parseInt(ipParts[3]);
+            const range = parseInt(document.getElementById('ipRange').value);
+            const threads = parseInt(document.getElementById('numThreads').value);
+            const suffix = document.getElementById('portPath').value;
+
+            let queue = [];
+            for(let i=0; i < range; i++) {
+                if(startOctet + i <= 255) queue.push(`${baseIp}.${startOctet + i}`);
+            }
+
+            const total = queue.length;
+            let processed = 0;
+            let active = 0;
+
+            const updateUI = () => {
+                const perc = Math.round((processed / total) * 100);
+                progressBar.style.width = perc + '%';
+                progressBar.textContent = perc + '%';
+            };
+
+            const validateHTTP200 = async (ip) => {
+                try {
+                    // Intento con CORS real
+                    const resp = await fetch(`http://${ip}${suffix}`, { method: 'GET', mode: 'cors' });
+                    return resp.status === 200;
+                } catch (e) {
+                    return false;
+                }
+            };
+
+            const scan = async (ip) => {
+                if (stopAll) return;
+                
+                const url = `http://${ip}${suffix}`;
+                const controller = new AbortController();
+                const id = setTimeout(() => controller.abort(), 2000);
+
+                try {
+                    statusMsg.textContent = `Probando ${ip}...`;
+                    
+                    // Detección de eco
+                    await fetch(url, { mode: 'no-cors', signal: controller.signal });
+                    
+                    if (!stopAll) {
+                        // Mostrar resultado parcial
+                        const li = document.createElement('li');
+                        li.id = `li-${ip.replace(/\./g, '-')}`;
+                        li.innerHTML = `<span>${ip}</span> <a href="${url}" target="_blank">Abrir</a>`;
+                        resultsList.prepend(li);
+                        
+                        // Si Galvatron tiene los headers CORS, esto lo encontrará de forma definitiva
+                        const isGalvatron = await validateHTTP200(ip);
+                        if (isGalvatron && !stopAll) {
+                            stopAll = true; 
+                            showSuccess(ip, url);
+                        }
+                    }
+                } catch (e) { } 
+                finally {
+                    clearTimeout(id);
+                    processed++;
+                    active--;
+                    updateUI();
+                    next();
+                }
+            };
+
+            const showSuccess = (ip, url) => {
+                resultsList.innerHTML = `
+                    <li class="found-hero">
+                        <h3 style="color:var(--primary-neon); margin:0 0 10px 0;">¡GALVATRON ENCONTRADO!</h3>
+                        <a href="${url}" target="_blank" style="font-size:1.4em;">${ip}${suffix}</a>
+                    </li>`;
+                resultsTitle.textContent = "Confirmado";
+                statusMsg.textContent = "Búsqueda detenida por éxito.";
+                startBtn.disabled = false;
+                startBtn.textContent = "RE-ESCANEAR";
+            };
+
+            const next = () => {
+                if (stopAll) return;
+                while (active < threads && queue.length > 0) {
+                    active++;
+                    scan(queue.shift());
+                }
+                if (processed >= total && !stopAll) {
+                    startBtn.disabled = false;
+                    statusMsg.textContent = "Escaneo completo.";
+                    resultsTitle.textContent = "Resultados";
+                }
+            };
+
+            next();
+        });
+    </script>
+</body>
+</html>
