@@ -20,6 +20,8 @@ Open one of the GitHub Pages links from a browser on the same local network as t
 
 Because this is a browser-only LAN helper, results depend on the browser, local network, device availability, and CORS behavior from the target endpoint.
 
-## License
+## Rights
 
-MIT
+Copyright (c) 2026 rolex20. All rights reserved.
+
+This repository is publicly visible only so the app can be served through GitHub Pages on a GitHub Free account. The source code is provided for personal hosting/reference only. No permission is granted to copy, modify, redistribute, sublicense, sell, or reuse this code or any derivative work without explicit written permission from the author.
